@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TileDirector : MonoBehaviour
@@ -191,7 +189,7 @@ public class TileDirector : MonoBehaviour
     public GameObject tower;
     public GameObject popper;
 
-    public int startingTowerHealth = 40;
+    public int startingTowerHealth = 10;
     public int underpopulationThreshold = 2;
     public uint spawnThreshold = 3;
     public uint overpopulationThreshold = 4;

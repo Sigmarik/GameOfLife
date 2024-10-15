@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tower: {fileID: 1980482842023963730}
   popper: {fileID: 2441308205700503005}
-  startingTowerHealth: 40
+  startingTowerHealth: 10
   underpopulationThreshold: 2
   spawnThreshold: 3
   overpopulationThreshold: 4

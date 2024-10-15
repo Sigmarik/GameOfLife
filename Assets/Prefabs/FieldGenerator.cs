@@ -1,12 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class FieldGenerator : MonoBehaviour
 {
@@ -257,5 +252,5 @@ public class FieldGenerator : MonoBehaviour
     public int startingScore = 100;
 
     public int birthReward = 10;
-    public int deathPenalty = 10;
+    public int deathPenalty = 11;
 }

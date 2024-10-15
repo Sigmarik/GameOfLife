@@ -1,15 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class ScoreDisplay : MonoBehaviour
 {
-    void Start()
-    {
-        textComponent_ = GetComponent<TextMeshPro>();
-    }
-
     public void SetScore(int score)
     {
         score_ = score;
@@ -22,7 +15,7 @@ public class ScoreDisplay : MonoBehaviour
             hadNegativeScore_ = true;
         }
 
-        textComponent_.SetText(scoreString);
+        GetComponent<TextMeshPro>().SetText(scoreString);
     }
 
     public void AddScore(int change)
@@ -41,7 +34,6 @@ public class ScoreDisplay : MonoBehaviour
         SetScore(score);
     }
 
-    private TextMeshPro textComponent_;
     private int score_ = 0;
     bool hadNegativeScore_ = false;
 }
