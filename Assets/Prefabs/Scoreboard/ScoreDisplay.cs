@@ -37,8 +37,8 @@ public class ScoreDisplay : MonoBehaviour
 
     public void ResetScore(int score)
     {
-        SetScore(score);
         hadNegativeScore_ = false;
+        SetScore(score);
     }
 
     private TextMeshPro textComponent_;
