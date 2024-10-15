@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -172,6 +173,19 @@ public class TileDirector : MonoBehaviour
     {
         balanceChange_ = -balance_;
         ApplyBalanceChange();
+    }
+
+    public void GetTeamEvents(out int teamLost, out int teamGained)
+    {
+        int newBalance = balance_ + balanceChange_;
+
+        teamLost = 0;
+        teamGained = 0;
+
+        if (newBalance * balance_ > 0) return;
+
+        teamLost = Math.Sign(balance_);
+        teamGained = Math.Sign(newBalance);
     }
 
     public GameObject tower;

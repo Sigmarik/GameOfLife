@@ -56,11 +56,39 @@ public class FieldGenerator : MonoBehaviour
 
         UpdateSpeedDisplay();
         UpdateStepDisplay();
+
+        Reset();
     }
 
     void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(sizeX * 2 * spacing, 0.0f, sizeY * spacing));
+    }
+
+    private void UpdateScores(TileDirector tile, out int positiveChange, out int negativeChange)
+    {
+        tile.GetTeamEvents(out int teamLost, out int teamGained);
+
+        positiveChange = 0;
+        negativeChange = 0;
+
+        if (teamGained > 0)
+        {
+            positiveChange += birthReward;
+        }
+        if (teamGained < 0)
+        {
+            negativeChange += birthReward;
+        }
+
+        if (teamLost > 0)
+        {
+            positiveChange -= deathPenalty;
+        }
+        if (teamLost < 0)
+        {
+            negativeChange -= deathPenalty;
+        }
     }
 
     public void SimStep()
@@ -73,13 +101,25 @@ public class FieldGenerator : MonoBehaviour
             }
         }
 
+        int scoreChangePositive = 0;
+        int scoreChangeNegative = 0;
+
         for (int idX = 0; idX < tiles_.Count; ++idX)
         {
             for (int idY = 0; idY < tiles_[idX].Count; ++idY)
             {
-                tiles_[idX][idY].ApplyBalanceChange();
+                TileDirector tile = tiles_[idX][idY];
+
+                UpdateScores(tile, out int positiveChange, out int negativeChange);
+                scoreChangePositive += positiveChange;
+                scoreChangeNegative += negativeChange;
+
+                tile.ApplyBalanceChange();
             }
         }
+
+        positiveScoreDisplay.GetComponent<ScoreDisplay>().AddScore(scoreChangePositive);
+        negativeScoreDisplay.GetComponent<ScoreDisplay>().AddScore(scoreChangeNegative);
 
         stepCount_++;
 
@@ -97,8 +137,8 @@ public class FieldGenerator : MonoBehaviour
             {
                 if (deltaX == 0 && deltaY == 0) continue;
 
-                int finalX = (int)idX + deltaX;
-                int finalY = (int)idY + deltaY;
+                int finalX = idX + deltaX;
+                int finalY = idY + deltaY;
 
                 if (finalX < 0 || finalX >= tiles_.Count) continue;
                 if (finalY < 0 || finalY >= tiles_[finalX].Count) continue;
@@ -126,6 +166,9 @@ public class FieldGenerator : MonoBehaviour
 
         stepCount_ = 0;
         UpdateStepDisplay();
+
+        positiveScoreDisplay.GetComponent<ScoreDisplay>().ResetScore(startingScore);
+        negativeScoreDisplay.GetComponent<ScoreDisplay>().ResetScore(startingScore);
 
         Pause();
     }
@@ -208,4 +251,11 @@ public class FieldGenerator : MonoBehaviour
     private uint stepCount_ = 0;
 
     private bool paused_ = true;
+
+    public GameObject positiveScoreDisplay;
+    public GameObject negativeScoreDisplay;
+    public int startingScore = 100;
+
+    public int birthReward = 10;
+    public int deathPenalty = 10;
 }

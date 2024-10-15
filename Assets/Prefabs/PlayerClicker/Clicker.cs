@@ -50,20 +50,24 @@ public class Clicker : MonoBehaviour
 
         int side = stage_ == GameStage.PositivePlayerTurn ? 1 : -1;
 
-        if (Input.GetMouseButtonDown((int)UnityEngine.UIElements.MouseButton.LeftMouse))
+        if (Input.GetMouseButtonDown((int)UnityEngine.UIElements.MouseButton.LeftMouse) &&
+            currentScoreDisplay_.GetScore() >= towerCost)
         {
             if (director.GetBalance() == 0 &&
                 director.GetPrimaryTeam() == side)
             {
                 director.ConvertToTower(side);
+                currentScoreDisplay_.AddScore(-towerCost);
             }
         }
 
-        if (Input.GetMouseButtonDown((int)UnityEngine.UIElements.MouseButton.RightMouse))
+        if (Input.GetMouseButtonDown((int)UnityEngine.UIElements.MouseButton.RightMouse) &&
+            currentScoreDisplay_.GetScore() >= pointCost)
         {
             if (!director.IsTower())
             {
                 director.ChangeBalance(side * 1);
+                currentScoreDisplay_.AddScore(-pointCost);
             }
         }
     }
@@ -75,6 +79,8 @@ public class Clicker : MonoBehaviour
         if (stage_ == GameStage.Observation)
         {
             stage_ = GameStage.PositivePlayerTurn;
+            currentScoreDisplay_ = positiveScoreDisplay.GetComponent<ScoreDisplay>();
+
             field_.Pause();
             pauseButton_.Lock();
             pauseButton_.UpdateState();
@@ -83,6 +89,7 @@ public class Clicker : MonoBehaviour
         else if (stage_ == GameStage.PositivePlayerTurn)
         {
             stage_ = GameStage.NegativePlayerTurn;
+            currentScoreDisplay_ = negativeScoreDisplay.GetComponent<ScoreDisplay>();
         }
         else if (stage_ == GameStage.NegativePlayerTurn)
         {
@@ -191,4 +198,11 @@ public class Clicker : MonoBehaviour
 
     public GameObject pauseButton;
     private PauseUnpauseBtn pauseButton_;
+
+    public GameObject positiveScoreDisplay;
+    public GameObject negativeScoreDisplay;
+    private ScoreDisplay currentScoreDisplay_;
+
+    public int towerCost = 30;
+    public int pointCost = 5;
 }
